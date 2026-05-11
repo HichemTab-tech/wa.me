@@ -22,6 +22,8 @@ jobs:
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@v2026.1
         with:
+          args: |
+            --property gradle.ide.support.future.agp.versions=true
           pr-mode: false
         env:
           QODANA_TOKEN: ${{ secrets.QODANA_TOKEN_2074980890 }}
