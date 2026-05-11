@@ -115,8 +115,7 @@ fun MainScreen(onInfoClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
-                        //TODO: fix privacy url
-                        val intent = Intent(Intent.ACTION_VIEW, "https://hichemtabtech.com/privacy-wame".toUri())
+                        val intent = Intent(Intent.ACTION_VIEW, "https://hichemtab-tech.github.io/wa.me/privacy.html".toUri())
                         context.startActivity(intent)
                     }
                 )
