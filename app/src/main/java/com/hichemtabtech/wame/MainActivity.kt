@@ -115,6 +115,7 @@ fun MainScreen(onInfoClick: () -> Unit) {
                     color = MaterialTheme.colorScheme.primary,
                     textDecoration = TextDecoration.Underline,
                     modifier = Modifier.clickable {
+                        //TODO: fix privacy url
                         val intent = Intent(Intent.ACTION_VIEW, "https://hichemtabtech.com/privacy-wame".toUri())
                         context.startActivity(intent)
                     }
@@ -158,20 +159,20 @@ fun DeveloperInfoScreen(onBack: () -> Unit) {
                 drawCircle(color = Color.LightGray)
             }
             
-            Text("Hichem Tab", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
-            Text("Android Developer", style = MaterialTheme.typography.bodyLarge)
+            Text("Hichem Taboukouyout", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+            Text("Full-stack Developer", style = MaterialTheme.typography.bodyLarge)
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            InfoLink("Website", "https://hichemtabtech.com")
-            InfoLink("GitHub", "https://github.com/hichemtabtech")
-            InfoLink("Email", "mailto:contact@hichemtabtech.com")
+            InfoLink("Website", "https://hichemtab-tech.me")
+            InfoLink("GitHub", "https://github.com/HichemTab-tech")
+            InfoLink("Email", "mailto:contact@hichemtab-tech.me")
             
             Spacer(modifier = Modifier.height(24.dp))
             
             Button(
                 onClick = {
-                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/hichemtabtech/wame".toUri())
+                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/HichemTab-tech/wa.me".toUri())
                     context.startActivity(intent)
                 },
                 modifier = Modifier.fillMaxWidth()
