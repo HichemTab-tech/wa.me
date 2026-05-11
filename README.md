@@ -45,6 +45,10 @@ On Windows:
 .\gradlew.bat assembleDebug
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for a small contribution guide.
+
 ## Built By
 
 @HichemTab-tech
