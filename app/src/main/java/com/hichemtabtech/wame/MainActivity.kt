@@ -3,12 +3,13 @@ package com.hichemtabtech.wame
 import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
-import androidx.core.net.toUri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,12 +17,21 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -33,9 +43,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.hichemtabtech.wame.ui.theme.WameTheme
 
 class MainActivity : ComponentActivity() {
@@ -44,19 +59,144 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WameTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    WameScreen(modifier = Modifier.padding(innerPadding))
+                val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "main") {
+                    composable("main") {
+                        MainScreen(onInfoClick = { navController.navigate("info") })
+                    }
+                    composable("info") {
+                        DeveloperInfoScreen(onBack = { navController.popBackStack() })
+                    }
                 }
             }
         }
     }
 }
 
-@Preview(showBackground = true)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WameScreenPreview() {
-    WameTheme {
-        WameScreen()
+fun MainScreen(onInfoClick: () -> Unit) {
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        "Wa.me Redirect",
+                        fontWeight = FontWeight.Bold
+                    )
+                },
+                actions = {
+                    IconButton(onClick = onInfoClick) {
+                        Icon(Icons.Default.Info, contentDescription = "Developer Info")
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    scrolledContainerColor = Color.Unspecified,
+                    navigationIconContentColor = Color.Unspecified,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    actionIconContentColor = Color.Unspecified
+                )
+            )
+        },
+        bottomBar = {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .padding(bottom = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                val context = LocalContext.current
+                Text(
+                    text = "Privacy Policy",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline,
+                    modifier = Modifier.clickable {
+                        val intent = Intent(Intent.ACTION_VIEW, "https://hichemtabtech.com/privacy-wame".toUri())
+                        context.startActivity(intent)
+                    }
+                )
+            }
+        }
+    ) { innerPadding ->
+        WameScreen(modifier = Modifier.padding(innerPadding))
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DeveloperInfoScreen(onBack: () -> Unit) {
+    val context = LocalContext.current
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text("Developer Info") },
+                navigationIcon = {
+                    IconButton(onClick = onBack) {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                            contentDescription = "Back"
+                        )
+                    }
+                }
+            )
+        }
+    ) { padding ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            // Picture Placeholder
+            androidx.compose.foundation.Canvas(modifier = Modifier.size(120.dp)) {
+                drawCircle(color = Color.LightGray)
+            }
+            
+            Text("Hichem Tab", style = MaterialTheme.typography.headlineMedium, fontWeight = FontWeight.Bold)
+            Text("Android Developer", style = MaterialTheme.typography.bodyLarge)
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            InfoLink("Website", "https://hichemtabtech.com")
+            InfoLink("GitHub", "https://github.com/hichemtabtech")
+            InfoLink("Email", "mailto:contact@hichemtabtech.com")
+            
+            Spacer(modifier = Modifier.height(24.dp))
+            
+            Button(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW, "https://github.com/hichemtabtech/wame".toUri())
+                    context.startActivity(intent)
+                },
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("View Source Code (Open Source)")
+            }
+        }
+    }
+}
+
+@Composable
+fun InfoLink(label: String, url: String) {
+    val context = LocalContext.current
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, url.toUri())
+                context.startActivity(intent)
+            }
+            .padding(8.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(label, fontWeight = FontWeight.Medium)
+        Text(url.removePrefix("mailto:"), color = MaterialTheme.colorScheme.primary, textDecoration = TextDecoration.Underline)
     }
 }
 
@@ -140,5 +280,21 @@ fun WameScreen(modifier: Modifier = Modifier) {
                 color = Color.White
             )
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MainScreenPreview() {
+    WameTheme {
+        MainScreen(onInfoClick = {})
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun DeveloperInfoScreenPreview() {
+    WameTheme {
+        DeveloperInfoScreen(onBack = {})
     }
 }
