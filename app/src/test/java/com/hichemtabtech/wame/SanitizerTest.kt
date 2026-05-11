@@ -30,7 +30,28 @@ class SanitizerTest {
     }
 
     @Test
-    fun testOtherCountry() {
+    fun testInternational() {
         assertEquals("+33123456789", Sanitizer.sanitizePhoneNumber("+33123456789"))
+    }
+
+    @Test
+    fun testNoNumberInText() {
+        assertEquals("", Sanitizer.sanitizePhoneNumber("hello world"))
+    }
+
+    @Test
+    fun testEmptyInput() {
+        assertEquals("", Sanitizer.sanitizePhoneNumber(""))
+    }
+
+    @Test
+    fun testAlreadyHasPlusAndZero() {
+        assertEquals("+213550123456", Sanitizer.sanitizePhoneNumber("+0550123456"))
+    }
+
+    @Test
+    fun testNineDigitsNoZero() {
+        // User copies "550123456"
+        assertEquals("+213550123456", Sanitizer.sanitizePhoneNumber("550123456"))
     }
 }
