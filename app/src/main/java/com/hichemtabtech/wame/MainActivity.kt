@@ -159,7 +159,7 @@ fun DeveloperInfoScreen(onBack: () -> Unit) {
         ) {
             // Picture Placeholder
             AsyncImage(
-                model = "https://hichemtab-tech.me/pdp.jpg",
+                model = R.drawable.pdp,
                 contentDescription = "Developer Profile Picture",
                 modifier = Modifier
                     .size(120.dp)
