@@ -82,7 +82,7 @@ fun MainScreen(onInfoClick: () -> Unit) {
             CenterAlignedTopAppBar(
                 title = {
                     Text(
-                        "Wa.me Redirect",
+                        "Tap to wa.me",
                         fontWeight = FontWeight.Bold
                     )
                 },

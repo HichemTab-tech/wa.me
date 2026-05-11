@@ -22,5 +22,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "wa.me"
+rootProject.name = "Tap to wa.me"
 include(":app")
